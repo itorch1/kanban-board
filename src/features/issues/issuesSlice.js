@@ -9,6 +9,7 @@ const initialState = {
   url: "",
   stars: 0,
   status: "idle",
+  isLoadingRepoData: false,
 };
 
 function getListType(list, state) {
@@ -29,12 +30,20 @@ export const fetchIssues = createAsyncThunk(
   }
 );
 
+export const fetchRepoData = createAsyncThunk(
+  "issues/fetchRepoData",
+  async (url) => {
+    const stars = await getRepoStars(url);
+    return { url, stars };
+  }
+);
+
 const issuesSlice = createSlice({
   name: "issues",
   initialState,
   reducers: {
     setData(state, action) {
-      console.log(action.type)
+      console.log(action.type);
       state.todos = action.payload.todos;
       state.assigned = action.payload.assigned;
       state.closed = action.payload.closed;
@@ -75,7 +84,7 @@ const issuesSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchIssues.fulfilled, (state, action) => {
-        console.log(action.type)
+        console.log(action.type);
         // Model data to our needs
         const issues = action.payload.data.map((issue) => ({
           title: issue.title,
@@ -107,6 +116,18 @@ const issuesSlice = createSlice({
       .addCase(fetchIssues.rejected, (state, action) => {
         state.status = "error";
         toast.error(action.error.message);
+      })
+      .addCase(fetchRepoData.pending, (state, action) => {
+        state.isLoadingRepoData = true;
+      })
+      .addCase(fetchRepoData.fulfilled, (state, action) => {
+        state.stars = action.payload.stars;
+        state.url = action.payload.url;
+        state.isLoadingRepoData = false;
+      })
+      .addCase(fetchRepoData.rejected, (state, action) => {
+        state.isLoadingRepoData = false;
+        toast.error(action.error.message);
       }),
 });
 
@@ -121,3 +142,4 @@ export const getClosed = (state) => state.issues.closed;
 
 export const getUrl = (state) => state.issues.url;
 export const getStars = (state) => state.issues.stars;
+export const getIsLoadingRepoData = (state) => state.issues.isLoadingRepoData;

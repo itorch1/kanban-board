@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { fetchIssues, setData } from "./issuesSlice";
+import { fetchIssues, fetchRepoData, setData } from "./issuesSlice";
 
 function RepoSearchForm() {
   const [repoUrl, setRepoUrl] = useState("");
@@ -13,6 +13,7 @@ function RepoSearchForm() {
     if (localStorage.getItem(repoUrl)) {
       const data = JSON.parse(localStorage.getItem(repoUrl));
       dispatch(setData(data));
+      dispatch(fetchRepoData(repoUrl));
       return;
     }
     dispatch(fetchIssues(repoUrl));

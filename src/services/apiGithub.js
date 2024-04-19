@@ -39,7 +39,7 @@ export async function getRepoStars(url) {
 
   try {
     const res = await fetch(requestUrl, headers);
-    if (!res.ok) throw new Error("Failed to fetch repo");
+    if (!res.ok) throw new Error("Failed to fetch repo data");
     const data = await res.json();
     return data.stargazers_count;
   } catch (err) {
