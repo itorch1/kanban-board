@@ -43,7 +43,6 @@ const issuesSlice = createSlice({
   initialState,
   reducers: {
     setData(state, action) {
-      console.log(action.type);
       state.todos = action.payload.todos;
       state.assigned = action.payload.assigned;
       state.closed = action.payload.closed;
@@ -84,7 +83,6 @@ const issuesSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchIssues.fulfilled, (state, action) => {
-        console.log(action.type);
         // Model data to our needs
         const issues = action.payload.data.map((issue) => ({
           title: issue.title,
