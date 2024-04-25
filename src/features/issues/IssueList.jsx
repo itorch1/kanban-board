@@ -21,7 +21,7 @@ function IssueList({ title, issues }) {
       : "closed";
 
   return (
-    <Col className="d-flex flex-column align-items-center">
+    <Col className="d-flex flex-column align-items-center col-md-4">
       <h3 className="text-dark">{title}</h3>
       <Card
         ref={ref} 
